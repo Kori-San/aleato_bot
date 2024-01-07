@@ -22,10 +22,9 @@ logger.info(f"TOKEN: {TOKEN}")
 
 async def hello(update: Update, context: CallbackContext) -> None:
     """Send a salutation when the user sends /hello."""
-    user_id = update.message.from_user.id
     text = '👋 Greetings !\n\nMy name is Aléato !'
 
-    await context.bot.send_message(user_id, text)
+    await update.message.reply_text(text)
 
 def main() -> None:
     """Start the bot."""
