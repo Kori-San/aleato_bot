@@ -1,9 +1,8 @@
 from dotenv import load_dotenv
-from telegram import Bot, Update
-from telegram.ext import CommandHandler, CallbackContext, Updater
+from telegram import Update
+from telegram.ext import Application, CommandHandler, CommandHandler, CallbackContext
 
 import logging
-import random
 import os
 
 # Load environment variables from .env file
@@ -14,48 +13,30 @@ TOKEN = os.getenv("API_TOKEN")
 if not TOKEN:
     raise ValueError("API_TOKEN not found in .env file")
 
-CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
-if not CHANNEL_USERNAME:
-    raise ValueError("CHANNEL_USERNAME not found in .env file")
-
 # Set up logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Function to check if a message has media content
-def has_media(message):
-    return message.photo or message.video or message.animation or message.audio
+# Log the TOKEN
+logger.info(f"TOKEN: {TOKEN}")
 
-# Function to handle the /randomposts command
-def random_posts(update: Update, context: CallbackContext) -> None:
-    # Get all messages from the channel
-    all_messages = context.bot.get_chat_history(chat_id=CHANNEL_USERNAME, limit=9999)  # Set a high limit
+async def hello(update: Update, context: CallbackContext) -> None:
+    """Send a salutation when the user sends /hello."""
+    user_id = update.message.from_user.id
+    text = '👋 Greetings !\n\nMy name is Aléato !'
 
-    # Filter messages with media content
-    media_messages = [message for message in all_messages if has_media(message)]
+    await context.bot.send_message(user_id, text)
 
-    # Randomly select 10 media messages
-    selected_media_messages = random.sample(media_messages, k=min(10, len(media_messages)))
+def main() -> None:
+    """Start the bot."""
+    # Create the Application and pass it your bot's token.
+    application = Application.builder().token(TOKEN).build()
 
-  # Delete the bot's previous messages
-    context.bot.delete_messages(chat_id=update.effective_chat.id, message_ids=update.effective_message.message_id)
+    # Add the /hello command handler
+    application.add_handler(CommandHandler("hello", hello))
 
-    # Send the selected media messages to the user
-    for message in selected_media_messages:
-        context.bot.send_message(chat_id=update.effective_chat.id, text=message.text)
+    # Run the bot until the user presses Ctrl-C
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
-# Create a bot instance
-bot = Bot(token=TOKEN)
-
-# Set up the updater and dispatcher
-updater = Updater(bot=bot, use_context=True)
-dispatcher = updater.dispatcher
-
-# Register the /randomposts command handler
-dispatcher.add_handler(CommandHandler("randomposts", random_posts))
-
-# Start the bot
-updater.start_polling()
-
-# Run the bot until you send a signal to stop it
-updater.idle()
+if __name__ == "__main__":
+    main()
