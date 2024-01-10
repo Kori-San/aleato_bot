@@ -20,11 +20,11 @@ async def get_all_topics(channel_id: int, session: str, api_id: str, api_hash: s
 
             while True:
                 r = await client(functions.channels.GetForumTopicsRequest(
-                    channel=channel_id,
-                    offset_date=date,
-                    offset_id=offset,
-                    offset_topic=offset_topic,
-                    limit=100,
+                    channel = channel_id,
+                    offset_date = date,
+                    offset_id = offset,
+                    offset_topic = offset_topic,
+                    limit = 100,
                 ))
 
                 if not total:
