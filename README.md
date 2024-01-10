@@ -3,18 +3,13 @@ A Simple Telegram Bot that allows you to randomize. A lot.
 
 ![Python Badge](https://img.shields.io/badge/Python-3.12-%233776AB?logo=python&logoColor=%233776AB)
 
-## 📋 Before using
-> **Aléato** uses both a *Bot connection* and a *Passive User connection* to retreive data a bot is forbidden to retreive (Forum Topics, Messages, etc...).
+## ⚠️ Disclaimer
+Since the **Telegram API** restrict a lot of **Bot actions**, this **Bot** uses both a '*Bot connection*' **AND** an '*User connection*'. 
 
-Add the **Bot** as an **Administrator**:
-- Open your Telegram channel.
-- Click on the channel name at the top of the screen.
-- Go to the settings of your channel:
-    - ***Phone*** - Click on the pen.
-    - ***PC*** - Click on the three little dots and go to "Manage Channel" or "Manage Group".
-- Go to "Administrators".
-- Click on "Add Administrator".
-- Search for your bot's username and add it.
+For the *Bot* to work perfectly you will need to have both your *Bot* **AND** *the User used for the server* in the channel where the *Bot* will be used.
+> The User doesn't need to have high privileges in most cases but **the Bot needs to be an Administrator**. 
+
+The first time you'll launch the server, *Telethon* will ask you for your **Phone Number**, **2FA Code** and **Password**. Those informations will be crypted by Telethon into a `.session` file.
 
 ## ⚙️ Make rules
 - ***run***:            Runs the Bot's server
