@@ -9,8 +9,8 @@ import random
 # Load environment variables from .env file
 load_dotenv()
 
-def get_all_topics(channel_id: int, session: str, api_id: str, api_hash: str, get_pinned : bool = False) -> [ForumTopic] :
-    with TelegramClient(session, api_id, api_hash) as client:
+async def get_all_topics(channel_id: int, session: str, api_id: str, api_hash: str, get_pinned : bool = False) -> [ForumTopic] :
+    async with TelegramClient(session, api_id, api_hash) as client:
         try:
             topics = []
             date = 0
@@ -19,7 +19,7 @@ def get_all_topics(channel_id: int, session: str, api_id: str, api_hash: str, ge
             total = 0
 
             while True:
-                r = client(functions.channels.GetForumTopicsRequest(
+                r = await client(functions.channels.GetForumTopicsRequest(
                     channel=channel_id,
                     offset_date=date,
                     offset_id=offset,
@@ -44,7 +44,8 @@ def get_all_topics(channel_id: int, session: str, api_id: str, api_hash: str, ge
             return filtered_topics
              
         except Exception as e:
-            print(f"Errore: {type(e).__name__}: {e}")
+            print(f"Error: {type(e).__name__}: {e}")
+
 
 def random_topics(count: int, topics: [ForumTopic]) -> [ForumTopic]:
     # Ensure we have at least num_topics non-pinned topics
